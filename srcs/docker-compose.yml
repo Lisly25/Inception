@@ -1,0 +1,5 @@
+#"The network line must be present here"
+
+#The Dockerfiles must be called here
+
+#But the containers mustn't be started with a command running an infinite loop (Forbidden stuff: tail -f, bash, sleep infinity, while true)
