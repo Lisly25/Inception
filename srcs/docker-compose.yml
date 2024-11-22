@@ -15,7 +15,11 @@ version: '2' #The version of docker compose we are using - might neeed to change
 services:
 
   db:
-    image: mariadb
+    container_name: mariadb_container
+    build:
+      context: srcs/requirements/mariadb
+      dockerfile: srcs/requirements/mariadb/Dockerfile
+    image: mariadb_image
     env_file:
       - "srcs/.env"
     volumes:
@@ -24,14 +28,22 @@ services:
       - inception_network
 
   server:
-    image: nginx
+    container_name: nginx_container
+    build:
+      context: srcs/requirements/nginx
+      dockerfile: srcs/requirements/nginx/Dockerfile
+    image: nginx_image
     env_file:
       - "srcs/.env"
     networks:
       - inception_network
 
   web:
-    image: wordpress
+    container_name: wordpress_container
+    build:
+      context: srcs/requirements/wordpress
+      dockerfile: srcs/requirements/wordpress/Dockerfile
+    image: wordpress_image
     depends_on:
       - db
       - nginx
