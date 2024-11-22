@@ -10,7 +10,7 @@
 
 #https://www.codecademy.com/article/mastering-docker-compose
 
-version: '3' #The version of docker compose we are using - might neeed to change this
+version: '2' #The version of docker compose we are using - might neeed to change this
 
 services:
 
@@ -20,11 +20,15 @@ services:
       - "srcs/.env"
     volumes:
       - db_volume:/home/skorbai/data
+    networks:
+      - inception_network
 
   server:
     image: nginx
     env_file:
       - "srcs/.env"
+    networks:
+      - inception_network
 
   web:
     image: wordpress
@@ -35,7 +39,13 @@ services:
       - "srcs/.env"
     volumes:
       - web_volume:/home/skorbai/data
+    networks:
+      - inception_network
 
 volumes:
   db_volume:
   web_volume:
+
+networks:
+  inception_network:
+    driver: overlay
