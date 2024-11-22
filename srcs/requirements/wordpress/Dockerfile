@@ -7,9 +7,9 @@ FROM alpine:3.19.4
 
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-#Here I'll probably want
-#RUN apt-get update && apt-get install -y nginx
+#apt-get update && apt-get install -y wordpress curl
 
+#Set-up steps: https://wiki.debian.org/WordPress
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 
