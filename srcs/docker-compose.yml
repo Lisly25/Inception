@@ -26,6 +26,8 @@ services:
       - db_volume:/home/skorbai/data
     networks:
       - inception_network
+    restart: always
+      
 
   server:
     container_name: nginx_container
@@ -37,6 +39,7 @@ services:
       - "srcs/.env"
     networks:
       - inception_network
+    restart: on-failure
 
   web:
     container_name: wordpress_container
@@ -53,6 +56,7 @@ services:
       - web_volume:/home/skorbai/data
     networks:
       - inception_network
+    restart: on-failure
 
 volumes:
   db_volume:
@@ -60,4 +64,4 @@ volumes:
 
 networks:
   inception_network:
-    driver: overlay
+    driver: bridge
