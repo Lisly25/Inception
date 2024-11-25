@@ -7,10 +7,15 @@ FROM alpine:3.19.4
 
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-#apt-get update && apt-get install -y wordpress curl
+#apt-get update && apt-get install -y (((wordpress))) curl php-fpm
+
+#Shouldn't be done in the dockerfile, but to check installation:
+	#sudo systemctl status php8.2-fpm
 
 #Set-up steps: https://wiki.debian.org/WordPress
+#or https://www.ionos.com/digitalguide/hosting/blogs/wordpress-nginx/
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 
 #EXPOSE <the port the container/image will expose>
+EXPOSE 9000
