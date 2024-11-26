@@ -15,3 +15,4 @@ DOCKERFILES = srcs/requirements/mariadb/Dockerfile \
 #cd srcs && docker compose up -d #-d just means detached mode - it'll keep running in the background, freeing up the terminal
 
 #cd srcs && docker compose down
+#rm -rf /home/skorbai/data

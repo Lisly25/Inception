@@ -7,7 +7,7 @@ FROM alpine:3.19.4
 
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-#apt-get update && apt-get install -y (((wordpress))) curl php-fpm
+#apk update && apk add (((wordpress))) curl php-fpm bash
 
 #Shouldn't be done in the dockerfile, but to check installation:
 	#sudo systemctl status php8.2-fpm

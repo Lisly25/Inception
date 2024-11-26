@@ -7,25 +7,32 @@ FROM alpine:3.19.4
 
 #WORKDIR <path to working directory - example /usr/local/app>
 
+#EXPOSE <the port the container/image will expose>
+EXPOSE 3306
+
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-#apt-get update && apt-get install -y mariadb-server
+RUN apk update && apk add mariadb mariadb-client bash
 
 #ARG CONFIG_FILE
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
+#COPY conf/init.sql /tmp/init.sql
+COPY tools/mariadb_setup.sh /usr/local/bin/
 
-#EXPOSE <the port the container/image will expose>
-#EXPOSE 3306
+RUN chmod +x /usr/local/bin/mariadb_setup.sh
+
+#Not sure if the syntax is right
+ENTRYPOINT [ "mariadb_setup.sh" ]
 
 # This health check makes a simple query to ensure the database can answer requests (and uses a system variable, we don't want to assume that there's already user created tables)
 # Can be only one health check - if there were multiple, only the last one would be executed
 
-#Not sure if the syntax is right
-#ENTRYPOINT [ "./tools/mariadb_setup.sh" ]
 
-#HEALTHCHECK --start-period=5m \
-#  CMD mariadb -e 'SELECT @@datadir;' || exit 1
+HEALTHCHECK --start-period=5m \
+  CMD mariadb -e 'SELECT @@datadir;' || exit 1
+
 
 #To actually start the database (not sure if I need to do it here with docker compose and all)
 #CMD ["mariadb"]
+CMD ["mysqld", "--user=mysql", "--init-file=/tmp/init.sql"]

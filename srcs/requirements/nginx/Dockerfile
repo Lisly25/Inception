@@ -8,9 +8,11 @@ FROM alpine:3.19.4
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
 #Here I'll probably want
-#RUN apt-get update && apt-get install -y nginx
+RUN apk update && apk add nginx bash
 
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+
 
 #EXPOSE <the port the container/image will expose>
