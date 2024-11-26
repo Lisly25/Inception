@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Setting up the website via command line: https://make.wordpress.org/cli/handbook/how-to/how-to-install/
+
 echo "Checking php-fpm installation"
 
 #sudo systemctl status php8.2-fpm #Check the version!
