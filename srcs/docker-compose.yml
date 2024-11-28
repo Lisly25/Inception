@@ -10,7 +10,7 @@
 
 #https://www.codecademy.com/article/mastering-docker-compose
 
-version: '2' #The version of docker compose we are using - might neeed to change this
+#version: '2' #The version of docker compose we are using - might neeed to change this
 
 services:
 
@@ -29,7 +29,7 @@ services:
     restart: always
       
 
-  server:
+  nginx:
     container_name: nginx_container
     build:
       context: srcs/requirements/nginx
