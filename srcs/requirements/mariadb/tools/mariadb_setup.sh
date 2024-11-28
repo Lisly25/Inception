@@ -8,12 +8,20 @@ if test -d "/var/lib/mysql/mysql"; then
 	echo "MariaDB already initialized"
 else
 	mariadb_install_db --datadir=/var/lib/mysql --user=mysql
-	echo "Waiting for database to be initialized..."
+	echo "Initialization started. Creating database..."
 	mariadbd --user=mysql --bootstrap << EOF
-FLUSH PRIVILAGES
+FLUSH PRIVILEGES;
+CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
+GRANT ALL PRIVILEGES ON *.* to 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+FLUSH PRIVILEGES;
 EOF
-	echo "Database initialized. Setting up database and accounts..."
+	echo "Database \" $MYSQL_DATABASE \" has been created successfully"
 	
 fi
 
-exec mariadbd_safe
+echo "Starting server"
+
+#Executing the script this way makes sure that this process replaces the current process (Thus it will be PID 1)
+exec "$@"
