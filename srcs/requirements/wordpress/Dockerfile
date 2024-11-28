@@ -5,9 +5,12 @@ FROM alpine:3.19.4
 
 #WORKDIR <path to working directory - example /usr/local/app>
 
+#EXPOSE <the port the container/image will expose>
+EXPOSE 9000
+
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-#apk update && apk add (((wordpress))) curl php-fpm bash
+RUN apk update && apk add curl php-fpm bash
 
 #Shouldn't be done in the dockerfile, but to check installation:
 	#sudo systemctl status php8.2-fpm
@@ -17,5 +20,4 @@ FROM alpine:3.19.4
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 
-#EXPOSE <the port the container/image will expose>
-EXPOSE 9000
+CMD ["echo", "wordpress_cmd_executed"]

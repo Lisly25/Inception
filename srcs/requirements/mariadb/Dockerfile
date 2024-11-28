@@ -18,21 +18,22 @@ RUN apk update && apk add mariadb mariadb-client bash
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 #COPY conf/init.sql /tmp/init.sql
-COPY tools/mariadb_setup.sh /usr/local/bin/
+#COPY tools/mariadb_setup.sh /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/mariadb_setup.sh
+#RUN chmod +x /usr/local/bin/mariadb_setup.sh
 
 #Not sure if the syntax is right
-ENTRYPOINT [ "mariadb_setup.sh" ]
+ENTRYPOINT [ "./tools/mariadb_setup.sh" ]
 
 # This health check makes a simple query to ensure the database can answer requests (and uses a system variable, we don't want to assume that there's already user created tables)
 # Can be only one health check - if there were multiple, only the last one would be executed
 
 
-HEALTHCHECK --start-period=5m \
-  CMD mariadb -e 'SELECT @@datadir;' || exit 1
+#HEALTHCHECK --start-period=5m \
+#  CMD mariadb -e 'SELECT @@datadir;' || exit 1
 
 
 #To actually start the database (not sure if I need to do it here with docker compose and all)
 #CMD ["mariadb"]
-CMD ["mysqld", "--user=mysql", "--init-file=/tmp/init.sql"]
+#CMD ["mysqld", "--user=mysql", "--init-file=/tmp/init.sql"]
+CMD ["echo ", "cmd_got_executed"]

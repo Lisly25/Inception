@@ -11,9 +11,9 @@ test $config_file
 
 echo "Editing the MariaDB Option file at $config_file"
 
-echo "[mysqld]" >> $config_file
+#echo "[mysqld]" >> $config_file
 
 #Make server listen on all IP addresses
-echo "bind-address=0.0.0.0" >> $config_file
+#echo "bind-address=0.0.0.0" >> $config_file
 #Enables networking
-echo "skip-networking=0" >> $config_file
+#echo "skip-networking=0" >> $config_file

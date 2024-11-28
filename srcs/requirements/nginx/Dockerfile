@@ -5,6 +5,9 @@ FROM alpine:3.19.4
 
 #WORKDIR <path to working directory - example /usr/local/app>
 
+#EXPOSE <the port the container/image will expose>
+EXPOSE 443
+
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
 #Here I'll probably want
@@ -12,7 +15,7 @@ RUN apk update && apk add nginx bash
 
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+#COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 
-#EXPOSE <the port the container/image will expose>
+CMD ["echo", "nginx_cmd_executed"]
