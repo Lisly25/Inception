@@ -19,7 +19,7 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-    image: mariadb
+    image: mariadb:skorbai
     env_file:
       - ".env"
     volumes:
@@ -34,7 +34,7 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    image: nginx
+    image: nginx:skorbai
     env_file:
       - ".env"
     networks:
@@ -46,7 +46,7 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    image: wordpress
+    image: wordpress:skorbai
     depends_on:
       - mariadb
       - nginx
