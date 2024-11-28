@@ -15,11 +15,11 @@
 services:
 
   mariadb:
-    container_name: mariadb_container
+    container_name: mariadb
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-    image: mariadb_image
+    image: mariadb
     env_file:
       - ".env"
     volumes:
@@ -30,11 +30,11 @@ services:
       
 
   nginx:
-    container_name: nginx_container
+    container_name: nginx
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    image: nginx_image
+    image: nginx
     env_file:
       - ".env"
     networks:
@@ -42,11 +42,11 @@ services:
     restart: on-failure
 
   wordpress:
-    container_name: wordpress_container
+    container_name: wordpress
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    image: wordpress_image
+    image: wordpress
     depends_on:
       - mariadb
       - nginx
