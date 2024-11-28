@@ -14,7 +14,7 @@ DOCKERFILES = srcs/requirements/mariadb/Dockerfile \
 
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
-SETUP_SCRIPT = srcs/tools/project_setup.sh
+SETUP_SCRIPT = srcs/requirements/tools/project_setup.sh
 
 #https://www.codecademy.com/article/mastering-docker-compose
 
