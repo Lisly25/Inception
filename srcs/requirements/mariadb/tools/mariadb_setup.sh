@@ -1,19 +1,19 @@
 #!/bin/bash
 
-#To make the script exit if any command exits with status that is NOT 0
-set -e
+echo "Executing setup script"
 
-config_file="/etc/my.cnf/mariadb.cnf"
+echo "Initializing mariaDB data directory and creating system tables"
 
-echo "Checking if MariaDB option file is present at $config_file"
+if test -d "/var/lib/mysql/mysql"; then
+	echo "MariaDB already initialized"
+else
+	mariadb_install_db --datadir=/var/lib/mysql --user=mysql
+	echo "Waiting for database to be initialized..."
+	mariadbd --user=mysql --bootstrap << EOF
+FLUSH PRIVILAGES
+EOF
+	echo "Database initialized. Setting up database and accounts..."
+	
+fi
 
-test $config_file
-
-echo "Editing the MariaDB Option file at $config_file"
-
-#echo "[mysqld]" >> $config_file
-
-#Make server listen on all IP addresses
-#echo "bind-address=0.0.0.0" >> $config_file
-#Enables networking
-#echo "skip-networking=0" >> $config_file
+exec mariadbd_safe

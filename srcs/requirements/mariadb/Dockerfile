@@ -13,10 +13,11 @@ EXPOSE 3306
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 #COPY conf/init.sql /tmp/init.sql
 COPY ./tools/mariadb_setup.sh /usr/local/bin/
+COPY ./conf/mariadb.cnf /etc/my.cnf/mariadb.cnf
 
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
-RUN apk update && apk add mariadb mariadb-client bash
+RUN apk update && apk add mariadb mariadb-client mariadb-common bash
 
 RUN chmod +x /usr/local/bin/mariadb_setup.sh
 
@@ -34,4 +35,4 @@ ENTRYPOINT [ "mariadb_setup.sh" ]
 #To actually start the database (not sure if I need to do it here with docker compose and all)
 #CMD ["mariadb"]
 #CMD ["mysqld", "--user=mysql", "--init-file=/tmp/init.sql"]
-CMD ["echo ", "cmd_got_executed"]
+#CMD ["mariadbd-safe"]
