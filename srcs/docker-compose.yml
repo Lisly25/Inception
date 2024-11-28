@@ -26,7 +26,7 @@ services:
       - db_volume:/var/lib/mysql
     networks:
       - inception_network
-    restart: on-failure
+    restart: always
       
 
   nginx:
