@@ -14,7 +14,7 @@
 
 services:
 
-  db:
+  mariadb:
     container_name: mariadb_container
     build:
       context: ./requirements/mariadb
@@ -41,14 +41,14 @@ services:
       - inception_network
     restart: on-failure
 
-  web:
+  wordpress:
     container_name: wordpress_container
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
     image: wordpress_image
     depends_on:
-      - db
+      - mariadb
       - nginx
     env_file:
       - ".env"
