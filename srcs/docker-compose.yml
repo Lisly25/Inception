@@ -17,8 +17,8 @@ services:
   db:
     container_name: mariadb_container
     build:
-      context: srcs/requirements/mariadb
-      dockerfile: srcs/requirements/mariadb/Dockerfile
+      context: /requirements/mariadb
+      dockerfile: /requirements/mariadb/Dockerfile
     image: mariadb_image
     env_file:
       - ".env"
@@ -32,8 +32,8 @@ services:
   nginx:
     container_name: nginx_container
     build:
-      context: srcs/requirements/nginx
-      dockerfile: srcs/requirements/nginx/Dockerfile
+      context: /requirements/nginx
+      dockerfile: /requirements/nginx/Dockerfile
     image: nginx_image
     env_file:
       - ".env"
@@ -44,8 +44,8 @@ services:
   web:
     container_name: wordpress_container
     build:
-      context: srcs/requirements/wordpress
-      dockerfile: srcs/requirements/wordpress/Dockerfile
+      context: /requirements/wordpress
+      dockerfile: /requirements/wordpress/Dockerfile
     image: wordpress_image
     depends_on:
       - db
