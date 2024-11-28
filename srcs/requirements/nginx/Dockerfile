@@ -8,14 +8,18 @@ FROM alpine:3.19.4
 #EXPOSE <the port the container/image will expose>
 EXPOSE 443
 
+RUN apk update && apk add nginx bash openssl
+
+#COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/self-signed.conf /etc/nginx/snippets/self-signed.conf
+COPY ./conf/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
+COPY ./tools/nginx_start.sh /usr/local/bin/
+
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
 #Here I'll probably want
-RUN apk update && apk add nginx bash
+RUN chmod +x /usr/local/bin/nginx_start.sh
+#RUN mkdir -p /etc/nginx/ssl
 
-
-#COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
-#COPY conf/nginx.conf /etc/nginx/nginx.conf
-
-
-CMD ["echo", "nginx_cmd_executed"]
+ENTRYPOINT [ "nginx_start.sh" ]
