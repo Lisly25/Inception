@@ -27,7 +27,7 @@ down:
 
 clean:
 	make down
-	rm -rf /home/skorbai/data
+	sudo rm -rf /home/skorbai/data
 
 fclean:
 	make clean
