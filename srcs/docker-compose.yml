@@ -21,7 +21,7 @@ services:
       dockerfile: srcs/requirements/mariadb/Dockerfile
     image: mariadb_image
     env_file:
-      - "srcs/.env"
+      - ".env"
     volumes:
       - db_volume:/var/lib/mysql
     networks:
@@ -36,7 +36,7 @@ services:
       dockerfile: srcs/requirements/nginx/Dockerfile
     image: nginx_image
     env_file:
-      - "srcs/.env"
+      - ".env"
     networks:
       - inception_network
     restart: on-failure
@@ -51,7 +51,7 @@ services:
       - db
       - nginx
     env_file:
-      - "srcs/.env"
+      - ".env"
     volumes:
       - web_volume:/var/www/html
     networks:
