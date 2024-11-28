@@ -23,7 +23,7 @@ services:
     env_file:
       - "srcs/.env"
     volumes:
-      - db_volume:/home/skorbai/data
+      - db_volume:/var/lib/mysql
     networks:
       - inception_network
     restart: always
@@ -53,14 +53,24 @@ services:
     env_file:
       - "srcs/.env"
     volumes:
-      - web_volume:/home/skorbai/data
+      - web_volume:/var/www/html
     networks:
       - inception_network
     restart: on-failure
 
 volumes:
   db_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/skorbai/data/database
+      o: bind
   web_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/skorbai/data/wordpress
+      o: bind
 
 networks:
   inception_network:
