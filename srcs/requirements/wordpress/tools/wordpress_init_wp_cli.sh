@@ -1,9 +1,21 @@
 #!/bin/bash
 
+if ! test -f wp-config.php; then
+    echo "First run. Editing PHP-FPM configuration file to allow connections from other containers"
+    sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php82/php-fpm.d/www.conf
+    echo "Contents of the configuration file after editing:"
+    cat /etc/php82/php-fpm.d/www.conf
+fi
+
+#Error when trying the below step: "ERROR 2005 (HY000): Unknown server host 'mariadb' (-2) "
+#Maybe solution? https://www.basedash.com/blog/how-to-fix-error-2005-hy000-unknown-mysql-server-host
+
 until mysql --host=mariadb --user=$MYSQL_USER --password=$MYSQL_PASSWORD --execute="SELECT 1"; do
     echo "Waiting for database to start up"
     sleep 3
 done
+
+#mariadb-admin ping --protocol=tcp --host=mariadb -u "$MYSQL_USER" --password="$MYSQL_PASSWORD" --wait
 
 #https://make.wordpress.org/cli/handbook/how-to/how-to-install/
 
@@ -67,7 +79,7 @@ else
     echo "Starting the server"
 
     #Not sure if this needs to be done here since we're also using nginx
-
-    exec /usr/sbin/php-fpm82 -F
+    
 fi
 
+exec /usr/sbin/php-fpm82 -F

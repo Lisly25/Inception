@@ -13,7 +13,7 @@ EXPOSE 3306
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 #COPY conf/init.sql /tmp/init.sql
 COPY ./tools/mariadb_setup.sh /usr/local/bin/
-COPY ./conf/mariadb.cnf /etc/my.cnf/mariadb.cnf
+COPY ./conf/mariadb.cnf /etc/my.cnf/mariadb-server.cnf
 
 #RUN <some command>
 #If using debian base, should install things with apt-get update && apt-get install -y <list of packages>
