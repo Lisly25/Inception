@@ -4,7 +4,7 @@
 
 echo "Checking if ssl certificate is present"
 
-if test -f $CERTS_KEY
+if test -f $CERTS_KEY; then
 	echo "Certificate already generated"
 else
 	echo "No certificate. Generating..."
