@@ -8,15 +8,15 @@ if test -f $CERTS_KEY; then
 	echo "Certificate already generated"
 else
 	echo "No certificate. Generating..."
-	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $CERTS_KEY \
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $CERTS_KEY \
 	 -out $CERTS_CRT -subj "/CN=$DOMAIN_NAME"
-	sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
+	openssl dhparam -out /etc/nginx/dhparam.pem 4096
 	echo "Certificate successfully generated"
 
 	echo "Adding certificate location info to self-signed.conf"
 
-	echo >> "ssl_certificate $CERTS_CRT"
-	echo >> "ssl_certificate_key $CERTS_KEY"
+	echo  "ssl_certificate $CERTS_CRT" >> /etc/nginx/snippets/self-signed.conf
+	echo "ssl_certificate_key $CERTS_KEY" >> /etc/nginx/snippets/self-signed.conf
 
 fi
 
