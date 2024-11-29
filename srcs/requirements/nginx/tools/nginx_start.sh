@@ -4,14 +4,20 @@
 
 echo "Checking if ssl certificate is present"
 
-if test /etc/ssl/private/nginx-selfsigned.key
+if test -f $CERTS_KEY
 	echo "Certificate already generated"
 else
 	echo "No certificate. Generating..."
-	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key \
-	 -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/CN=$DOMAIN_NAME"
+	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $CERTS_KEY \
+	 -out $CERTS_CRT -subj "/CN=$DOMAIN_NAME"
 	sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
 	echo "Certificate successfully generated"
+
+	echo "Adding certificate location info to self-signed.conf"
+
+	echo >> "ssl_certificate $CERTS_CRT"
+	echo >> "ssl_certificate_key $CERTS_KEY"
+
 fi
 
 
