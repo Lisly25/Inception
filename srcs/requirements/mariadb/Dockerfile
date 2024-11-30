@@ -30,7 +30,7 @@ ENTRYPOINT [ "mariadb_setup.sh" ]
 
 #HEALTHCHECK --start-period=5m \
 #  CMD mariadb -e 'SELECT @@datadir;' || exit 1
-
+CMD ["mysqld", "--user=mysql"]
 
 #To actually start the database (not sure if I need to do it here with docker compose and all)
 #CMD ["mariadb"]
