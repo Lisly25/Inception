@@ -21,6 +21,7 @@ RUN apk update && apk add mariadb mariadb-client mariadb-common bash
 
 RUN chmod +x /usr/local/bin/mariadb_setup.sh
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
+RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld
 
 #Not sure if the syntax is right
 ENTRYPOINT [ "mariadb_setup.sh" ]
