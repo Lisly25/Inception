@@ -2,6 +2,8 @@
 
 #Create directory where volumes will be placed
 
+#TODO: add 127.0.0.1	$DOMAIN_NAME	to /etc/hosts if not there already
+
 if test -d /home/skorbai/data/wordpress; then
 	echo "Wordpress volume already exists"
 else
