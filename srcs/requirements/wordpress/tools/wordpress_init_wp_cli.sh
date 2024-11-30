@@ -31,7 +31,7 @@ else
     echo "Creating WP-CLI command utility"
 
     chmod +x wp-cli.phar
-    sudo mv wp-cli.phar /usr/local/bin/wp
+    mv wp-cli.phar /usr/local/bin/wp
 
     echo "Checking WP-CLI installation"
 
