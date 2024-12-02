@@ -82,4 +82,4 @@ else
     
 fi
 
-exec /usr/sbin/php-fpm82 -F
+exec php-fpm82 -F
