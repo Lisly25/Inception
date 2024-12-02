@@ -25,7 +25,7 @@ services:
     env_file:
       - ".env"
     volumes:
-      - db_volume:/var/lib/mysql
+      - DB:/var/lib/mysql
     networks:
       - inception_network
     restart: always
@@ -39,6 +39,8 @@ services:
     image: nginx:skorbai
     env_file:
       - ".env"
+    volumes:
+      - WordPress:/var/www/html
     networks:
       - inception_network
     restart: on-failure
@@ -55,19 +57,19 @@ services:
     env_file:
       - ".env"
     volumes:
-      - web_volume:/var/www/html
+      - WordPress:/var/www/html
     networks:
       - inception_network
     restart: on-failure
 
 volumes:
-  db_volume:
+  DB:
     driver: local
     driver_opts:
       type: none
       device: /home/skorbai/data/database
       o: bind
-  web_volume:
+  WordPress:
     driver: local
     driver_opts:
       type: none
