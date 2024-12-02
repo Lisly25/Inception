@@ -15,6 +15,7 @@ DOCKERFILES = srcs/requirements/mariadb/Dockerfile \
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
 SETUP_SCRIPT = srcs/requirements/tools/project_setup.sh
+CLEANUP_SCRIPT = srcs/requirements/tools/project_cleanup.sh
 
 #https://www.codecademy.com/article/mastering-docker-compose
 
@@ -25,9 +26,9 @@ $(NAME):	$(DOCKERFILES) $(SETUP_SCRIPT) $(DOCKER_COMPOSE_FILE)
 down:
 	cd srcs && docker compose down
 
-clean:
+clean:	$(CLEANUP_SCRIPT)
 	make down
-	sudo rm -rf /home/skorbai/data
+	./$(CLEANUP_SCRIPT)
 
 fclean:
 	make clean
