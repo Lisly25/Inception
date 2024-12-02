@@ -28,9 +28,12 @@ echo "Checking for website domain name in /etc/hosts"
 #hence the regex below looks for lines ENDING with the pattern
 
 
+#the command tee is used to read from stdin and write to a file
+#to circumvent permission issues
+
 if grep skorbai.42.fr$ < /etc/hosts; then
 	echo "Website domain name is already listed in /etc/hosts"
 else
 	echo "Website domain name not yet listed in /etc/hosts. Adding now"
-	sudo echo "127.0.0.1		skorbai.42.fr" >> /etc/hosts
+	sudo echo "127.0.0.1		skorbai.42.fr" | sudo tee -a /etc/hosts
 fi
