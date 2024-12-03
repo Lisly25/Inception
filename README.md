@@ -88,3 +88,32 @@ The database and the wordpress website's files mustn't be lost every time the sy
 		end
 			C <-->|port 443| D@{ shape: diamond, label: WWW }
 ```
+
+
+## MariaDB cheat sheet
+
+Some basic commands to verify that the database has been set up correctly
+
+Show list of databases:
+
+```
+SHOW DATABASES;
+```
+
+To work on a specific database:
+
+```
+USE <database>
+```
+
+To list the tables in a database (make sure to use the USE command first):
+
+```
+SHOW TABLES;
+```
+
+To look at all the entries in a database:
+
+```
+SELECT * FROM <table>;
+```
