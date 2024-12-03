@@ -19,6 +19,7 @@ RUN chown -R 1000 /var/www/html
 
 
 COPY ./tools/wordpress_init_wp_cli.sh /usr/local/bin
+COPY ./conf/www.conf /etc/php82/php-fpm.d/www.conf
 
 RUN chmod +x /usr/local/bin/wordpress_init_wp_cli.sh
 
