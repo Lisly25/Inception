@@ -69,13 +69,22 @@ The fundamental idea is that the website is ran with the help of three docker co
 The database and the wordpress website's files mustn't be lost every time the system is restarted, so they are stored in docker volumes
 
 ```mermaid
-sequenceDiagram
-    participant WWW
-    box Grey Docker Network
-    participant NC as nginx<br/> container
-    participant WC as WordPress<br/> container
-    participant MC as MariaDB<br/> container
-    end
-    participant MV as MariaDB<br/> volume
-    participant WV as WordPress<br/> volume
+	flowchart LR
+		classDef Container fill:#395480,stroke:#333,stroke-width:4px
+		classDef Volume fill:#215e1b,stroke:#333,stroke-width:4px
+		subgraph "**Host machine**"
+		subgraph "**Docker containers**"
+		A[MariaDB<br/>container] <-->|port 3306| B(WordPress<br/>container)
+		B <-->|port 9000| C[nginx<br/>container]
+		class A Container
+		class B Container
+		class C Container
+		end
+		E@{ shape: cyl, label: "MariaDB<br/> volume" } <--> A
+		F@{ shape: cyl, label: WordPress<br/> volume } <--> B
+		F <---> C
+		class E Volume
+		class F Volume
+		end
+			C <-->|port 443| D@{ shape: diamond, label: WWW }
 ```
