@@ -10,6 +10,8 @@ EXPOSE 443
 
 RUN apk update && apk add nginx bash openssl
 
+RUN mkdir -p /var/www/html && chown -R 1000 /var/www/html
+
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./conf/self-signed.conf /etc/nginx/snippets/self-signed.conf
