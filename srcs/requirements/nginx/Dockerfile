@@ -14,8 +14,8 @@ RUN mkdir -p /var/www/html && chown -R 755 /var/www/html
 
 #COPY <to copy files from the host - in our case should be /home/login/data on the host machine using Docker>
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-#COPY ./conf/self-signed.conf /etc/nginx/snippets/self-signed.conf
-#COPY ./conf/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
+COPY ./conf/self-signed.conf /etc/nginx/snippets/self-signed.conf
+COPY ./conf/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 COPY ./tools/nginx_start.sh /usr/local/bin/
 
 #RUN <some command>
