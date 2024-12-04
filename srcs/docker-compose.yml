@@ -1,14 +1,3 @@
-#"The network line must be present here"
-
-# https://docs.docker.com/engine/network/
-
-#The Dockerfiles must be called here
-
-#But the containers mustn't be started with a command running an infinite loop (Forbidden stuff: tail -f, bash, sleep infinity, while true)
-
-#About PID 1: https://daveiscoding.hashnode.dev/why-do-you-need-an-init-process-inside-your-docker-container-pid-1
-
-#https://www.codecademy.com/article/mastering-docker-compose
 
 #version: '2' #The version of docker compose we are using - might neeed to change this
 

@@ -97,6 +97,31 @@ The database and the wordpress website's files mustn't be lost every time the sy
 			C <-->|port 443| D@{ shape: diamond, label: WWW }
 ```
 
+### Docker compose file
+
+Since the program requires three containers to work together, a docker compose was used to set it up.
+
+The three containers are configured as three services. 
+
+```yml
+services:
+
+	mariadb:
+		container_name: mariadb
+		build:
+			context: ./requirements/mariadb
+			dockerfile: Dockerfile
+		image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
+		ports:
+			- 3306
+		env_file:
+			- ".env"
+		volumes:
+			- DB:/var/lib/mysql
+		networks:
+			- inception_network #All three services will be part of this
+		restart: always
+```
 
 ## MariaDB cheat sheet
 
