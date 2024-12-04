@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if ! test -f wp-config.php; then
-    echo "First run. Editing PHP-FPM configuration file to allow connections from other containers"
-    sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php82/php-fpm.d/www.conf
-    echo "Contents of the configuration file after editing:"
-    cat /etc/php82/php-fpm.d/www.conf
-fi
+#if ! test -f wp-config.php; then
+#    echo "First run. Editing PHP-FPM configuration file to allow connections from other containers"
+#    sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php82/php-fpm.d/www.conf
+#    echo "Contents of the configuration file after editing:"
+#    cat /etc/php82/php-fpm.d/www.conf
+#fi
 
 #Error when trying the below step: "ERROR 2005 (HY000): Unknown server host 'mariadb' (-2) "
 #Maybe solution? https://www.basedash.com/blog/how-to-fix-error-2005-hy000-unknown-mysql-server-host
