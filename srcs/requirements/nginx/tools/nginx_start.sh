@@ -15,10 +15,10 @@ else
 	#openssl dhparam -out /etc/nginx/dhparam.pem 4096
 	echo "Certificate successfully generated"
 
-	echo "Adding certificate location info to self-signed.conf"
+	#echo "Adding certificate location info to self-signed.conf"
 
-	echo  "ssl_certificate $CERTS_CRT;" >> /etc/nginx/snippets/self-signed.conf
-	echo "ssl_certificate_key $CERTS_KEY;" >> /etc/nginx/snippets/self-signed.conf
+	#echo  "ssl_certificate $CERTS_CRT;" >> /etc/nginx/snippets/self-signed.conf
+	#echo "ssl_certificate_key $CERTS_KEY;" >> /etc/nginx/snippets/self-signed.conf
 
 fi
 
