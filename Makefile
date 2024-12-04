@@ -32,7 +32,7 @@ clean:	$(CLEANUP_SCRIPT)
 
 fclean:
 	make clean
-	docker system prune -a --volumes
+	docker system prune --force -a --volumes
 
 all:
 	make $(NAME)
