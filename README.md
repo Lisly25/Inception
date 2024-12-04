@@ -34,6 +34,14 @@ The start-up process will take some time. You might also be prompted to enter yo
 
 4. The website can now be visited at https://skorbai.42.fr (Note that even after step 3. finishes, it might take some time for the website to become available)
 
+Note for usage on Windows/WSL:
+
+For the domain name to be recognized, this line has to be added to ` c:\windows\system32\drivers\etc\hosts `
+
+```
+	127.0.0.1	skorbai.42.fr
+```
+
 ## How to stop the program
 
 ### Suspending the program
