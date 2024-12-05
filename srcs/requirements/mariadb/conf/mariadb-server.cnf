@@ -18,4 +18,4 @@ basedir     = /usr
 datadir     = /var/lib/mysql
 tmpdir      = /tmp
 skip-networking = false
-bind-address    = mariadb
+bind-address    = 0.0.0.0
