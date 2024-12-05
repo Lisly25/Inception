@@ -252,7 +252,25 @@ This service did not depend on any other, so this is what I set up first.
 		echo "MariaDB already initialized"
 	else
 		mysql_install_db --datadir=/var/lib/mysql --group=mysql --user=mysql --skip-test-db --auth-root-authentication-method=socket
-		#This command initializes the MariaDB data directory and creates the system tables in the mysql database
+```
+
+The `mysql_install_db` command initializes the MariaDB data directory and creates the system tables in the mysql database
+
+The flags used:
+
++ `--datadir=/var/lib/mysql` : sets the path to the MariaDB data directory
+
++ `user=mysql`: can only be used by root as an option (Docker container processes do use root). This is the login user name to use for running mariadb. Files and directories created by mariadb will be owned by this user.
+
++ `--skip-test-db`: by default, a test database would be installed - this option skips that
+
++ `--auth-root-authentication-method=socket`: a root@localhost account is created regardless of the setting. This way, this account is authenticated with the unix_socket plugin. This is safer than the normal option
+
+This command also reads options from option files, including the one we provided
+
+See also the documentation: https://mariadb.com/kb/en/mysql_install_db/
+
+```bash
 		echo "Initialization started. Creating database..."
 		mysqld --user=mysql --bootstrap << EOF
 	FLUSH PRIVILEGES;
