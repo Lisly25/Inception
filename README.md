@@ -123,6 +123,50 @@ services:
 		restart: always
 ```
 
+```yml
+	wordpress:
+		container_name: wordpress
+		build:
+			context: ./requirements/wordpress
+			dockerfile: Dockerfile
+		image: wordpress:skorbai
+		depends_on: #Determines the startup order of the containers
+			- mariadb
+			- nginx
+		env_file:
+			- ".env"
+		volumes:
+			- WordPress:/var/www/html
+		networks:
+			- inception_network
+		restart: on-failure
+```
+
+## Useful docker commands for debugging
+
+To show the complete log of the stdout of the container:
+
+```bash
+$ docker logs \<container_name\>
+```
+
+To run a command inside the container in interactive mode:
+
+```bash
+$ docker exec -it \<container_name\> \<command\>
+```
+
+This command can be `mysql` for example, to check the mariadb database, or even bash
+
+To look at the logs from nginx, you first have to use the above command to get a shell from the container
+
+With my configuration, this is where the error and access log are found (this is the default), but this is something that can be changed in the nginx configuration file
+
+```bash
+$ docker exec -it nginx bash
+$ cd /var/log/nginx
+```
+
 ## MariaDB cheat sheet
 
 Some basic commands to verify that the database has been set up correctly
