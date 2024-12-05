@@ -7,7 +7,7 @@ echo "Initializing mariaDB data directory and creating system tables"
 if test -d "/var/lib/mysql/mysql"; then
 	echo "MariaDB already initialized"
 else
-	mysql_install_db --datadir=/var/lib/mysql --group=mysql --user=mysql --skip-test-db --auth-root-authentication-method=socket
+	mysql_install_db --datadir=/var/lib/mysql --user=mysql --skip-test-db --auth-root-authentication-method=socket
 	echo "Initialization started. Creating database..."
 	mysqld --user=mysql --bootstrap << EOF
 FLUSH PRIVILEGES;
