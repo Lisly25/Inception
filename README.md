@@ -112,7 +112,7 @@ services:
 			context: ./requirements/mariadb
 			dockerfile: Dockerfile
 		image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
-		ports:
+		expose: #With this rule, the port is only exposed inside the docker network
 			- 3306
 		env_file:
 			- ".env"
@@ -130,6 +130,8 @@ services:
 			context: ./requirements/wordpress
 			dockerfile: Dockerfile
 		image: wordpress:skorbai
+		expose: #With this rule, the port is only exposed inside the docker network
+      		- "9000"
 		depends_on: #Determines the startup order of the containers
 			- mariadb
 			- nginx
@@ -141,6 +143,102 @@ services:
 			- inception_network
 		restart: on-failure
 ```
+
+```yml
+	nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx:skorbai
+    ports:
+      - "443:443" # Since we want to be able to connect to this container from outside the docker network, it's important to bind it to a host port. Note that the "port" rule is used, not "expose"
+    env_file:
+      - ".env"
+    volumes:
+      - WordPress:/var/www/html
+    networks:
+      - inception_network
+    restart: on-failure
+```
+
+The network doesn't require configuration (bridge is already the default driver), but it is important to declare it in the docker compose file
+
+```yml
+	networks:
+  		inception_network:
+    		driver: bridge
+
+```
+
+For the volumes, we are specifying that they should be located in a specific directory within the host machine. This setup ensures that the contents are also copied back to the host (the ownership of teh volume directory also needs to be set with chown in the dockerfile)
+
+```yml
+	volumes:
+		DB:
+			driver: local
+			driver_opts:
+				type: none
+				device: /home/skorbai/data/database
+				o: bind
+		WordPress:
+			driver: local
+			driver_opts:
+				type: none
+				device: /home/skorbai/data/wordpress
+				o: bind
+
+```
+
+### Dockerfiles
+
+Instead of looking at the specific files, let's look at the rules in general:
+
+```Dockerfile
+FROM alpine:3.19.4
+```
+
+Determines the base image, which will be pulled from Dockerhub. The tag corresponds to a specific version
+
+```Dockerfile
+EXPOSE 9000
+```
+
+Technically not necessary, since this was also defined in the docker compose files.
+
+```Dockerfile
+WORKDIR /var/www/html
+```
+
+Determines the current working directory where commands will be executed by default. If not defined, will be root (/)
+
+```Dockerfile
+RUN apk update && apk add nginx bash openssl
+```
+
+Executes commands inside the container. `apk` is the alpine package manager. All containers run the `apk update` command before installing any packages. The `&&` between the updating and installing ensures that nothing is installed if the updating step fails
+
+Another command that's also ran in all containers is `chmod` to ensure that the entrypoint scripts are set as executables
+
+Some other commands might also be ran depending on the image. 
+
+```Dockerfile
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+```
+
+Used to copy resources between the host machine and the container. Usually configuration files
+
+```Dockerfile
+ENTRYPOINT [ "nginx_start.sh" ]
+```
+
+Used to specify a command to be ran on container startup. In this setup, these are all bash scripts, that will set up the environment, and execute the actual programs that we need the containers for (mysqld from the mariadb container, php-fpm82 from wordpress, and nginx)
+
+### How the containers work - entrypoint scripts and configuration file
+
+#### MariaDB
+
+
 
 ## Useful docker commands for debugging
 
