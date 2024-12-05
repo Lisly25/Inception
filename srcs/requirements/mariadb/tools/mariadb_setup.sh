@@ -24,4 +24,4 @@ fi
 echo "Starting server"
 
 #Executing the script this way makes sure that this process replaces the current process (Thus it will be PID 1)
-exec "$@"
+exec mysqld --user=mysql
