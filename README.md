@@ -238,7 +238,40 @@ Used to specify a command to be ran on container startup. In this setup, these a
 
 #### MariaDB
 
+This service did not depend on any other, so this is what I set up first. 
 
+##### The entrypoint script
+
+```bash
+	echo "Executing setup script"
+
+	echo "Initializing mariaDB data directory and creating system tables"
+
+	#checking if the database has already been set up
+	if test -d "/var/lib/mysql/mysql"; then
+		echo "MariaDB already initialized"
+	else
+		mysql_install_db --datadir=/var/lib/mysql --group=mysql --user=mysql --skip-test-db --auth-root-authentication-method=socket
+		#This command initializes the MariaDB data directory and creates the system tables in the mysql database
+		echo "Initialization started. Creating database..."
+		mysqld --user=mysql --bootstrap << EOF
+	FLUSH PRIVILEGES;
+	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+	GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
+	GRANT ALL PRIVILEGES ON *.* to 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+	FLUSH PRIVILEGES;
+	EOF
+		echo "Database \" $MYSQL_DATABASE \" has been created successfully"
+		
+	fi
+
+	echo "Starting server"
+
+	#Executing the script this way (with "exec") makes sure that this process replaces the current process (Thus it will be PID 1)
+	exec mysqld --user=mysql
+
+```
 
 ## Useful docker commands for debugging
 
@@ -263,6 +296,36 @@ With my configuration, this is where the error and access log are found (this is
 ```bash
 $ docker exec -it nginx bash
 $ cd /var/log/nginx
+```
+
+To list all the networks:
+
+```bash
+$ docker network ls
+```
+
+To filter the output of docker ps based on which network they are connected to:
+
+```bash
+$ docker ps --filter network=\<network id, full or partial\>
+```
+
+To list all volumes:
+
+```bash
+$ docker volume ls
+```
+
+Deleting a volume:
+
+```bash
+$ docker volume rm \<volume name\>
+```
+
+To filter the output of docker ps based on whether a specific volume is mounted to them:
+
+```bash
+$ docker ps --filter volume=\<volume name\>
 ```
 
 ## MariaDB cheat sheet
