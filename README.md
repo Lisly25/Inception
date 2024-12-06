@@ -521,7 +521,7 @@ exec php-fpm82 -F
 
 the `chmod o+w -R /var/www/html/wp-content` command ensures that everyone has write permissions for the specified directory, which will also hold uploads by users
 
-Wordpress websites use PHP. `php-fpm` (a.k.a FastCGI process manager) is a processor for PHP: since PHP is a high-level language, it needs to be compiled before a web server can use it. PHP-FPM is a specific variant which was designed to be able to handle heavy loads. Wordpress website tend to use this as their PHP processor.
+Wordpress websites use PHP. `php-fpm` (a.k.a FastCGI process manager) is a processor for PHP: since PHP is a high-level language, it needs to be compiled before a web server can use it. PHP-FPM is a specific variant which was designed to be able to handle heavy loads. Wordpress websites tend to use this as their PHP processor.
 
 We need this to be the running process in this container: nginx will redirect traffic here if necessary
 
@@ -539,7 +539,7 @@ To run a command inside the container in interactive mode:
 $ docker exec -it <container_name> <command>
 ```
 
-This command can be `mysql` for example, to check the mariadb database, or even bash
+This command can be `mysql` for example, to check the mariadb database, or even `bash`
 
 To look at the logs from nginx, you first have to use the above command to get a shell from the container
 
@@ -556,7 +556,7 @@ To list all the networks:
 $ docker network ls
 ```
 
-To filter the output of docker ps based on which network they are connected to:
+To filter the output of docker ps based on which network the containers are connected to:
 
 ```bash
 $ docker ps --filter network=<network id, full or partial>
