@@ -412,7 +412,8 @@ In the end, the `nginx -g daemon off` will start nginx in the foreground
 ```conf
 [www]
 
-#These two settings aren't important, since the containers are using root 
+#nobody is a special user: used for things that don't need special permissions
+#Usually reserved for vulnerable services, so that if they get hacked, they'll have minimal damage on the system
 user = nobody
 group = nobody
 
@@ -470,25 +471,36 @@ Downloading wordpress command line tool according to official instructions: http
 `wp --info` is used to check if the installation was successful - if not, the script exits
 
 ```bash
-
-
     echo "Downloading wordpress"
 
     wp core download --allow-root
 ```
 
+Downloads and extracts Wordpress core files to /var/www/html (which was set as the working directory in the Dockerfile). Normally, this, and many other wp commands cannot be used with the root user, but that is exactly what we'll be doing: so we circumvent this restriction with the `--allow-root` flag.
 
+This is not a safe practice by itself: but note that the php processes will be ran under the `nobody` user, *not* `root`, as specified in the www.conf file
 
 ```bash
     echo "Generating wordpress config file"
 
 
     wp config create --allow-root --dbhost=mariadb --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD
+```
 
+Creates a new wp-config.php file.
+
+Note that we didn't use the admin user of mysql here
+Also, `--dbhost=mariadb` would not accept using just the container name if the docker network wasn't set up correctly
+
+```bash
     echo "Installing wordpress"
 
     wp core install --url=$DOMAIN_NAME --title="Inception" --admin_user=$WP_ADMIN_USERNAME --admin_password=$WP_ADMIN_PASS --admin_email=$WP_ADMIN_EMAIL --allow-root
+```
 
+Creates the wordpress tables in the database
+
+```bash
     echo "Checking if the normal user already exists"
 
     if wp user get "$WP_NORMAL_USERNAME" --allow-root; then
@@ -497,7 +509,11 @@ Downloading wordpress command line tool according to official instructions: http
         echo "No such user yet. Adding it now"
         wp user create "$WP_NORMAL_USERNAME" "$WP_NORMAL_EMAIL" --role=author --user_pass="$WP_NORMAL_PASS" --allow-root
     fi
+```
 
+Creating a second user
+
+```bash
     chmod o+w -R /var/www/html/wp-content
 
     echo "Starting the server"
@@ -505,9 +521,13 @@ Downloading wordpress command line tool according to official instructions: http
 fi
 
 exec php-fpm82 -F
-
-
 ```
+
+the `chmod o+w -R /var/www/html/wp-content` command ensures that everyone has write permissions for the specified directory, which will also hold uploads by users
+
+Wordpress websites use PHP. `php-fpm` (a.k.a FastCGI process manager) is a processor for PHP: since PHP is a high-level language, it needs to be compiled before a web server can use it. PHP-FPM is a specific variant which was designed to be able to handle heavy loads. Wordpress website tend to use this as their PHP processor.
+
+We need this to be the running process in this container: nginx will redirect traffic here if necessary
 
 ## Useful docker commands for debugging
 
