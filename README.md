@@ -623,3 +623,15 @@ To look at all the entries in a database:
 ```
 SELECT * FROM <table>;
 ```
+
+## Disable automatic redirect to HTTPS in Firefox
+
+A specific requirement of the project was that it should be impossible to connect to the site with plain HTTP. However, Firefox by default changes the URL to HTTPS. To turn off this behaviour for testing purposes:
+
+1. paste `about:config` to the address bar and press enter to bring up configuration options
+
+2. set `network.stricttransportsecurity.preloadlist` to `false`
+
+3. set `browser.fixup.fallback-to-https` to `false`
+
+(This solution was found at https://stackoverflow.com/questions/30532471/firefox-redirects-to-https)
