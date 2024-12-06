@@ -268,7 +268,7 @@ bind-address        = 0.0.0.0 # by default would only allow connections form loc
 	if test -d "/var/lib/mysql/mysql"; then
 		echo "MariaDB already initialized"
 	else
-		mysql_install_db --datadir=/var/lib/mysql --group=mysql --user=mysql --skip-test-db --auth-root-authentication-method=socket
+		mysql_install_db --datadir=/var/lib/mysql --group=mysql --user=mysql --skip-test-db
 ```
 
 The `mysql_install_db` command initializes the MariaDB data directory and creates the system tables in the mysql database
@@ -281,8 +281,6 @@ The flags used:
 
 + `--skip-test-db`: by default, a test database would be installed - this option skips that
 
-+ `--auth-root-authentication-method=socket`: a root@localhost account is created regardless of the setting. This way, this account is authenticated with the unix_socket plugin. This is safer than the normal option
-
 This command also reads options from option files, including the one we provided
 
 See also the documentation: https://mariadb.com/kb/en/mysql_install_db/
@@ -290,10 +288,10 @@ See also the documentation: https://mariadb.com/kb/en/mysql_install_db/
 ```bash
 		mysqld --user=mysql --bootstrap << EOF
 	FLUSH PRIVILEGES;
+	ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
 	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
 	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 	GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
-	GRANT ALL PRIVILEGES ON *.* to 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
 	FLUSH PRIVILEGES;
 	EOF
 ```
@@ -303,6 +301,8 @@ Starts the MariaDB server daemon in bootstrap mode, which allows for running com
 A heredoc is used to create the database for the wordpress website
 
 ('%' is a wildcard in this syntax)
+
+The `ALTER USER` command is important: this prevents accessing the database without a password, even for the root user
 
 #### Nginx
 
@@ -475,7 +475,11 @@ Downloading wordpress command line tool according to official instructions: http
     echo "Downloading wordpress"
 
     wp core download --allow-root
+```
 
+
+
+```bash
     echo "Generating wordpress config file"
 
 
@@ -510,13 +514,13 @@ exec php-fpm82 -F
 To show the complete log of the stdout of the container:
 
 ```bash
-$ docker logs \<container_name\>
+$ docker logs <container_name>
 ```
 
 To run a command inside the container in interactive mode:
 
 ```bash
-$ docker exec -it \<container_name\> \<command\>
+$ docker exec -it <container_name> <command>
 ```
 
 This command can be `mysql` for example, to check the mariadb database, or even bash
@@ -539,7 +543,7 @@ $ docker network ls
 To filter the output of docker ps based on which network they are connected to:
 
 ```bash
-$ docker ps --filter network=\<network id, full or partial\>
+$ docker ps --filter network=<network id, full or partial>
 ```
 
 To list all volumes:
@@ -551,18 +555,34 @@ $ docker volume ls
 Deleting a volume:
 
 ```bash
-$ docker volume rm \<volume name\>
+$ docker volume rm <volume name>
 ```
 
 To filter the output of docker ps based on whether a specific volume is mounted to them:
 
 ```bash
-$ docker ps --filter volume=\<volume name\>
+$ docker ps --filter volume=<volume name>
 ```
 
 ## MariaDB cheat sheet
 
 Some basic commands to verify that the database has been set up correctly
+
+Access mariadb with specific user:
+
+```bash
+$ mysql -u <username> -p <database>
+```
+
+You will be prompted for the password after this.
+
+You could also enter the password in the command following the -p flag without spaces between them, like this:
+
+```bash
+$ mysql -u <username> -p<password> <database>
+```
+
+but this is considered insecure, since the password is in plain text, and anyone who can look at your command history on the server could see it
 
 Show list of databases:
 
