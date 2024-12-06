@@ -105,41 +105,41 @@ The three containers are configured as three services.
 
 ```yaml
 mariadb:
-	container_name: mariadb
-	build:
-		context: ./requirements/mariadb
-		dockerfile: Dockerfile
-	image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
-	expose: #With this rule, the port is only exposed inside the docker network
-		- 3306
-	env_file:
-		- ".env"
-	volumes:
-		- DB:/var/lib/mysql
-	networks:
-		- inception_network #All three services will be part of this
-	restart: always
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
+    expose: #With this rule, the port is only exposed inside the docker network
+      - 3306
+    env_file:
+      - ".env"
+    volumes:
+      - DB:/var/lib/mysql
+    networks:
+      - inception_network #All three services will be part of this
+    restart: always
 ```
 
 ```yaml
 wordpress:
-	container_name: wordpress
-	build:
-		context: ./requirements/wordpress
-		dockerfile: Dockerfile
-	image: wordpress:skorbai
-	expose: #With this rule, the port is only exposed inside the docker network
-   		- "9000"
-	depends_on: #Determines the startup order of the containers
-		- mariadb
-		- nginx
-	env_file:
-		- ".env"
-	volumes:
-		- WordPress:/var/www/html
-	networks:
-		- inception_network
-	restart: on-failure
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress:skorbai
+    expose: #With this rule, the port is only exposed inside the docker network
+      - "9000"
+    depends_on: #Determines the startup order of the containers
+      - mariadb
+      - nginx
+    env_file:
+      - ".env"
+    volumes:
+      - WordPress:/var/www/html
+    networks:
+      - inception_network
+    restart: on-failure
 ```
 
 ```yaml
@@ -163,29 +163,27 @@ nginx:
 The network doesn't require configuration (bridge is already the default driver), but it is important to declare it in the docker compose file
 
 ```yml
-	networks:
-  		inception_network:
-    		driver: bridge
-
+networks:
+  inception_network:
+    driver: bridge
 ```
 
 For the volumes, we are specifying that they should be located in a specific directory within the host machine. This setup ensures that the contents are also copied back to the host (the ownership of teh volume directory also needs to be set with chown in the dockerfile)
 
 ```yml
-	volumes:
-		DB:
-			driver: local
-			driver_opts:
-				type: none
-				device: /home/skorbai/data/database
-				o: bind
-		WordPress:
-			driver: local
-			driver_opts:
-				type: none
-				device: /home/skorbai/data/wordpress
-				o: bind
-
+volumes:
+  DB:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/skorbai/data/database
+      o: bind
+  WordPress:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/skorbai/data/wordpress
+      o: bind
 ```
 
 ### Dockerfiles
