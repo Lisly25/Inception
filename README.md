@@ -56,7 +56,7 @@ This will just execute the docker compose down command. The wordpress website's 
 
 ### Remove the volumes
 
-Using the 'make clean' command at the root of the repository will suspend the program, and removed the website files as well as the database contents (by removing the docker volumes from the host machine)
+Using the 'make clean' command at the root of the repository will suspend the program, and remove the website files as well as the database contents (by removing the docker volumes from the host machine)
 
 ```bash
 $ make clean
@@ -101,51 +101,49 @@ The database and the wordpress website's files mustn't be lost every time the sy
 
 Since the program requires three containers to work together, a docker compose was used to set it up.
 
-The three containers are configured as three services. 
+The three containers are configured as three services.
 
-```yml
-services:
-
-	mariadb:
-		container_name: mariadb
-		build:
-			context: ./requirements/mariadb
-			dockerfile: Dockerfile
-		image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
-		expose: #With this rule, the port is only exposed inside the docker network
-			- 3306
-		env_file:
-			- ".env"
-		volumes:
-			- DB:/var/lib/mysql
-		networks:
-			- inception_network #All three services will be part of this
-		restart: always
+```yaml
+mariadb:
+	container_name: mariadb
+	build:
+		context: ./requirements/mariadb
+		dockerfile: Dockerfile
+	image: mariadb:skorbai #The tag is important - otherwise, the official image would be pulled from dockerhub
+	expose: #With this rule, the port is only exposed inside the docker network
+		- 3306
+	env_file:
+		- ".env"
+	volumes:
+		- DB:/var/lib/mysql
+	networks:
+		- inception_network #All three services will be part of this
+	restart: always
 ```
 
-```yml
-	wordpress:
-		container_name: wordpress
-		build:
-			context: ./requirements/wordpress
-			dockerfile: Dockerfile
-		image: wordpress:skorbai
-		expose: #With this rule, the port is only exposed inside the docker network
-      		- "9000"
-		depends_on: #Determines the startup order of the containers
-			- mariadb
-			- nginx
-		env_file:
-			- ".env"
-		volumes:
-			- WordPress:/var/www/html
-		networks:
-			- inception_network
-		restart: on-failure
+```yaml
+wordpress:
+	container_name: wordpress
+	build:
+		context: ./requirements/wordpress
+		dockerfile: Dockerfile
+	image: wordpress:skorbai
+	expose: #With this rule, the port is only exposed inside the docker network
+   		- "9000"
+	depends_on: #Determines the startup order of the containers
+		- mariadb
+		- nginx
+	env_file:
+		- ".env"
+	volumes:
+		- WordPress:/var/www/html
+	networks:
+		- inception_network
+	restart: on-failure
 ```
 
-```yml
-	nginx:
+```yaml
+nginx:
     container_name: nginx
     build:
       context: ./requirements/nginx
