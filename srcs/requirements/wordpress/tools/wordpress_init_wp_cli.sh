@@ -56,4 +56,4 @@ else
     
 fi
 
-exec php-fpm82 -F
+exec php-fpm83 -F
