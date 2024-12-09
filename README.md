@@ -228,7 +228,7 @@ Used to copy resources between the host machine and the container. Usually confi
 ENTRYPOINT [ "nginx_start.sh" ]
 ```
 
-Used to specify a command to be ran on container startup. In this setup, these are all bash scripts, that will set up the environment, and execute the actual programs that we need the containers for (mysqld from the mariadb container, php-fpm82 from wordpress, and nginx)
+Used to specify a command to be ran on container startup. In this setup, these are all bash scripts, that will set up the environment, and execute the actual programs that we need the containers for (mysqld from the mariadb container, php-fpm83 from wordpress, and nginx)
 
 ### How the containers work - entrypoint scripts and configuration files
 
@@ -516,7 +516,7 @@ Creating a second user
     
 fi
 
-exec php-fpm82 -F
+exec php-fpm83 -F
 ```
 
 the `chmod o+w -R /var/www/html/wp-content` command ensures that everyone has write permissions for the specified directory, which will also hold uploads by users
