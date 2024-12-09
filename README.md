@@ -99,7 +99,7 @@ The database and the wordpress website's files mustn't be lost every time the sy
 
 ### Docker compose file
 
-Since the program requires three containers to work together, a docker compose was used to set it up.
+Since the program requires three containers to work together, a docker compose file was used to set it up.
 
 The three containers are configured as three services.
 
@@ -168,7 +168,7 @@ networks:
     driver: bridge
 ```
 
-For the volumes, we are specifying that they should be located in a specific directory within the host machine. This setup ensures that the contents are also copied back to the host (the ownership of teh volume directory also needs to be set with chown in the dockerfile)
+For the volumes, we are specifying that they should be located in a specific directory within the host machine. This setup ensures that the contents are also copied back to the host (the ownership of the volume directory also needs to be set with chown in the dockerfile)
 
 ```yml
 volumes:
@@ -191,7 +191,7 @@ volumes:
 Instead of looking at the specific files, let's look at the rules in general:
 
 ```Dockerfile
-FROM alpine:3.19.4
+FROM alpine:3.20.3
 ```
 
 Determines the base image, which will be pulled from Dockerhub. The tag corresponds to a specific version
@@ -303,6 +303,10 @@ The `ALTER USER` command is important: this prevents accessing the database with
 #### Nginx
 
 Nginx is used to host the website. It has access to the docker volume that contains the wordpress website's files
+
+The website should only be accessible via HTTPS, so the server doesn't listen on port 80 (which is used for HTTP)
+
+HTTPS is made secure using SSL (Secure Socket Layer) / TLS (Transport Layer Security, which is an updated, more secure version of SSL).
 
 ##### The configuration files
 
